@@ -272,6 +272,7 @@ class TodusStore(
     // ------------------------------------------------------------------ GET/PUT/DELETE
 
     fun get(key: String): ByteArray? {
+        if (isStopped) return null
         if (isCircuitOpen()) {
             AppLog.w("[ToDus GET] circuito abierto; se ignora: $key")
             return null
@@ -332,7 +333,16 @@ class TodusStore(
         return null
     }
 
+    @Volatile private var isStopped = false
+    
+    fun stop() {
+        isStopped = true
+        client.dispatcher.executorService.shutdown()
+        client.connectionPool.evictAll()
+    }
+
     fun put(key: String, data: ByteArray): Boolean {
+        if (isStopped) return false
         if (isCircuitOpen()) {
             AppLog.w("[ToDus PUT] circuito abierto; se ignora: $key")
             stats.storePutFail.incrementAndGet()

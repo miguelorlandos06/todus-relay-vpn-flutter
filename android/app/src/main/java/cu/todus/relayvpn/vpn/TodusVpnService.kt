@@ -120,6 +120,9 @@ class TodusVpnService : android.net.VpnService() {
         } catch (e: Exception) {}
         wakeLock = null
         thread(name = "vpn-stop", isDaemon = true) {
+            try {
+                engine?.store?.stop()
+            } catch (_: Exception) {}
             engine?.stop()
             engine = null
         }
