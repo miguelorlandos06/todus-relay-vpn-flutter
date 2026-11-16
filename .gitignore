@@ -1,0 +1,29 @@
+# Flutter / Dart
+.dart_tool/
+.packages
+.pub-cache/
+.pub/
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pubspec.lock
+
+# Android (generado por Gradle / Flutter)
+android/.gradle/
+android/local.properties
+android/key.properties
+*.jks
+!android/app/release.jks
+android/app/.cxx/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Generado por la herramienta de Flutter
+android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java
