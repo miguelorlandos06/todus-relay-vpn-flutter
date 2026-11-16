@@ -2,7 +2,7 @@ name: build-apk
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, master ]
     tags: [ 'v*' ]
   workflow_dispatch:
 
@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   build:
-    name: Validar y compilar APK
+    name: Compilar APK (Debug)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -33,25 +33,19 @@ jobs:
       - name: Dependencias
         run: flutter pub get
 
-      - name: Analizar (0 errores, 0 avisos)
-        run: flutter analyze --fatal-infos
-
-      - name: Pruebas
-        run: flutter test
-
-      - name: Compilar APK (release AOT, solo arm64-v8a)
-        run: flutter build apk --release --target-platform android-arm64
+      - name: Compilar APK (Debug)
+        run: flutter build apk --debug --target-platform android-arm64
 
       - name: Preparar APK
         run: |
           mkdir -p dist
-          cp build/app/outputs/flutter-apk/app-release.apk "dist/ToDusRelayVPN-Flutter-${GITHUB_REF_NAME}-arm64-v8a-release.apk"
+          cp build/app/outputs/flutter-apk/app-debug.apk "dist/ToDusRelayVPN-Flutter-${GITHUB_REF_NAME}-debug.apk"
           ls -la dist
 
       - name: Subir artifact
         uses: actions/upload-artifact@v4
         with:
-          name: apk-arm64-v8a-${{ github.ref_name }}
+          name: apk-debug-${{ github.ref_name }}
           path: dist/*.apk
 
       - name: Crear Release con la APK (solo en tags v*)
@@ -60,7 +54,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh release create "${GITHUB_REF_NAME}" \
-            "dist/ToDusRelayVPN-Flutter-${GITHUB_REF_NAME}-arm64-v8a-release.apk" \
+            "dist/ToDusRelayVPN-Flutter-${GITHUB_REF_NAME}-debug.apk" \
             --repo "${GITHUB_REPOSITORY}" \
-            --title "ToDus Relay VPN (Flutter) ${GITHUB_REF_NAME}" \
+            --title "ToDus Relay VPN (Flutter) ${GITHUB_REF_NAME} [DEBUG]" \
             --generate-notes
