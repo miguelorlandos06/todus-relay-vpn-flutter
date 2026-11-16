@@ -527,7 +527,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           keyboardType: TextInputType.url,
                           decoration: const InputDecoration(
                             labelText: 'URL del buzón (bucket/prefijo)',
-                            helperText: 'Por defecto: https://152.207.206.86/public/dk/proxy_r2 — '
+                            helperText: 'Por defecto: https://s3.todus.cu/stickers — '
                                 'cámbiala a la vez en el servidor.',
                           ),
                           onChanged: (v) => _set('base_url', v),
